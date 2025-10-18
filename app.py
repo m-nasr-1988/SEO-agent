@@ -67,12 +67,10 @@ def fetch_page(u: str, timeout: int = 15, ua: str = "ibagsie-seo-agent/0.1"):
 def html_to_text(html: str, max_chars: int = 4000) -> str:
     """Convert HTML to readable text for preview."""
     soup = BeautifulSoup(html, "html.parser")
-    # Remove script/style tags
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
     text = soup.get_text(separator="\n")
     text = "\n".join(line.strip() for line in text.splitlines() if line.strip())
-    # Truncate for display
     if len(text) > max_chars:
         text = text[:max_chars] + "\n... [truncated]"
     return text
@@ -83,11 +81,9 @@ def html_to_text(html: str, max_chars: int = 4000) -> str:
 st.title("🔎 SEO Agent — Phase 1")
 st.write("Enter a URL and fetch the page to verify connectivity and see the raw HTML with a text preview.")
 
-# Guardrail: show normalized URL
 norm_url = normalize_url(url)
 st.info(f"Target URL: {norm_url}")
 
-# Fetch action
 if fetch_btn:
     if not norm_url:
         st.error("Please provide a valid URL.")
@@ -99,7 +95,6 @@ if fetch_btn:
                 st.error(f"Request failed: {e}")
                 st.stop()
 
-        # Summary metrics
         col1, col2, col3 = st.columns(3)
         with col1:
             st.metric("Status code", result["status_code"])
@@ -112,11 +107,9 @@ if fetch_btn:
         with st.expander("Response headers"):
             st.json(result["headers"])
 
-        # Raw HTML
         st.subheader("Raw HTML")
         st.code(result["text"][:10000] + ("\n... [truncated]" if len(result["text"]) > 10000 else ""), language="html")
 
-        # Text preview
         st.subheader("Text preview")
         preview_text = html_to_text(result["text"])
         st.text(preview_text)
