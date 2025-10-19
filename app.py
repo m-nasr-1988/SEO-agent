@@ -29,6 +29,18 @@ if st.button("Analyze & Suggest"):
             elements["title"], elements["meta_description"], elements["h1"], method=method
         )
 
+    # --- Visual indicator ---
+    if method == "Mock":
+        st.markdown(
+            "<span style='color:white; background-color:#FF9800; padding:4px 8px; border-radius:4px;'>🟠 Mock Mode Active</span>",
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown(
+            "<span style='color:white; background-color:#4CAF50; padding:4px 8px; border-radius:4px;'>🟢 OpenAI Mode Active</span>",
+            unsafe_allow_html=True
+        )
+
     st.subheader("Suggested Improvements")
     col1, col2 = st.columns(2)
     with col1:
