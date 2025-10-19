@@ -30,3 +30,12 @@ def evaluate_seo_elements(elements: dict) -> dict:
         "has_h1": has_h1
     }
 
+import re
+from collections import Counter
+
+def extract_keywords(text, top_n=10):
+    words = re.findall(r"\b[a-zA-Z]{3,}\b", text.lower())
+    counts = Counter(words)
+    return counts.most_common(top_n)
+
+
