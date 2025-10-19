@@ -155,9 +155,19 @@ if st.button("Analyze & Compare"):
         df_scores = pd.DataFrame([your_scores, comp_scores], index=["You", "Competitor"])
         st.dataframe(df_scores)
 
-        fig = px.line_polar(df_scores.reset_index(), 
-                            r=df_scores.columns, 
-                            theta=df_scores.columns, 
-                            line_close=True,
-                            color="index")
+        # Melt into long format for Plotly
+        df_long = df_scores.reset_index().melt(
+            id_vars="index",
+            var_name="Metric",
+            value_name="Score"
+        )
+
+        fig = px.line_polar(
+            df_long,
+            r="Score",
+            theta="Metric",
+            color="index",
+            line_close=True,
+            range_r=[0,100]
+        )
         st.plotly_chart(fig, use_container_width=True)
