@@ -1,9 +1,8 @@
-import os
-
-# Example with OpenAI (replace with your provider)
+import streamlit as st
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
 
 def suggest_improvements(title: str, meta: str, h1: str) -> dict:
     """Generate improved SEO suggestions for title, meta, and H1."""
