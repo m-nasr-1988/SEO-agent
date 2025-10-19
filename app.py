@@ -5,18 +5,20 @@ import requests
 st.set_page_config(page_title="SEO Agent - Phase 4", page_icon="🔎", layout="wide")
 
 st.title("🔎 SEO Agent — Phase 4")
-st.write("Analyze a page and generate SEO suggestions (choose Mock or OpenAI).")
+st.write("Analyze a page and generate SEO suggestions (toggle between Mock and OpenAI).")
 
-# --- Persist method selection across runs ---
-if "method" not in st.session_state:
-    st.session_state["method"] = "Mock"  # default
+# --- Persist toggle state across runs ---
+if "use_openai" not in st.session_state:
+    st.session_state["use_openai"] = False  # default to Mock
 
-method = st.selectbox(
-    "Choose suggestion method:",
-    ["Mock", "OpenAI"],
-    index=0 if st.session_state["method"] == "Mock" else 1,
-    key="method"
+# Toggle button
+st.session_state["use_openai"] = st.toggle(
+    "Use OpenAI (turn off for Mock Mode)",
+    value=st.session_state["use_openai"]
 )
+
+# Derive method from toggle
+method = "OpenAI" if st.session_state["use_openai"] else "Mock"
 
 url = st.text_input("Enter a URL", value="https://ibagsie.com")
 
