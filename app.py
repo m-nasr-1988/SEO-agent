@@ -7,10 +7,18 @@ st.set_page_config(page_title="SEO Agent - Phase 4", page_icon="🔎", layout="w
 st.title("🔎 SEO Agent — Phase 4")
 st.write("Analyze a page and generate SEO suggestions (choose Mock or OpenAI).")
 
-url = st.text_input("Enter a URL", value="https://ibagsie.com")
+# --- Persist method selection across runs ---
+if "method" not in st.session_state:
+    st.session_state["method"] = "Mock"  # default
 
-# Dropdown to select method
-method = st.selectbox("Choose suggestion method:", ["Mock", "OpenAI"])
+method = st.selectbox(
+    "Choose suggestion method:",
+    ["Mock", "OpenAI"],
+    index=0 if st.session_state["method"] == "Mock" else 1,
+    key="method"
+)
+
+url = st.text_input("Enter a URL", value="https://ibagsie.com")
 
 if st.button("Analyze & Suggest"):
     try:
