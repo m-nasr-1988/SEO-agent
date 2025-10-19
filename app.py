@@ -1,17 +1,18 @@
 import streamlit as st
-import pandas as pd
 from modules import seo_analyzer, seo_suggester
+import requests
 
 st.set_page_config(page_title="SEO Agent - Phase 4", page_icon="🔎", layout="wide")
 
 st.title("🔎 SEO Agent — Phase 4")
-st.write("Analyze a page and generate AI-powered SEO suggestions.")
+st.write("Analyze a page and generate SEO suggestions (choose Mock or OpenAI).")
 
 url = st.text_input("Enter a URL", value="https://ibagsie.com")
-analyze_btn = st.button("Analyze & Suggest")
 
-if analyze_btn:
-    import requests
+# Dropdown to select method
+method = st.selectbox("Choose suggestion method:", ["Mock", "OpenAI"])
+
+if st.button("Analyze & Suggest"):
     try:
         resp = requests.get(url, timeout=15)
         html = resp.text
@@ -23,9 +24,9 @@ if analyze_btn:
     st.subheader("Current SEO Elements")
     st.json(elements)
 
-    with st.spinner("Generating AI suggestions..."):
+    with st.spinner(f"Generating {method} suggestions..."):
         suggestions = seo_suggester.suggest_improvements(
-            elements["title"], elements["meta_description"], elements["h1"]
+            elements["title"], elements["meta_description"], elements["h1"], method=method
         )
 
     st.subheader("Suggested Improvements")
