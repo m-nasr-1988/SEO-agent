@@ -6,3 +6,5 @@ openai
 nltk
 spacy
 plotly
+tabulate
+fpdf
